@@ -116,7 +116,9 @@ class Game extends React.Component{
             {this.makeBoardRow(7)}
           </div>
         </div>
+        
         <h1>ChessShare</h1>
+        
       </div>
     
     );
