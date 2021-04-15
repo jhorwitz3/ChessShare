@@ -16,8 +16,8 @@ class Square extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      rank: props.rank,
-      file: props.file,
+      col: props.col,
+      row: props.row,
       img: props.img,
       src: props.src,
       alt: props.alt,
@@ -28,14 +28,14 @@ class Square extends React.Component{
   render(){
     if (this.state.img){
       return(
-        <button className={`rank-${this.state.rank}`} id={`file-${this.state.file}`} 
+        <button className={`col-${this.state.col}`} id={`row-${this.state.row}`} 
         onClick={this.onClick} style={{backgroundColor: this.state.color}}>
           <img src={this.state.src} alt={this.state.alt}/>
         </button>
         );
     } else{
       return(
-        <button className={`rank-${this.state.rank}`} id={`file-${this.state.file}`} 
+        <button className={`col-${this.state.col}`} id={`row-${this.state.row}`} 
         onClick={this.onClick} style={{backgroundColor: this.state.color}}>
         </button>
         );
@@ -63,24 +63,22 @@ class Game extends React.Component{
     }
   }
 
-  makeBoardRow = (rank) => {
-      let row = [];
-      let even_ranks = ["a", "c", "e", "g"];
-      let odd_ranks = ["b", "d", "f", "h"];
-
-      for (let j=0;j<8;j++){
-        if ((j%2 !==0 && odd_ranks.includes(rank)) || (j%2===0 && even_ranks.includes(rank))){
-          row.push(
-            <Square file={j} rank={rank} img={false} color={"white"}/>
+  makeBoardRow = (col) => {
+      let cols = [];
+      
+      for (let row=0;row<8;row++){
+        if ((row%2 !==0 && col%2 !==0) || (row%2===0 && col%2===0)){
+          cols.push(
+            <Square row={row} col={col} img={false} color={"white"}/>
           )
         } else {
-          row.push(
-            <Square file={j} rank={rank} img={false} color={"brown"}/>
+          cols.push(
+            <Square row={row} col={col} img={false} color={"brown"}/>
           )
         }
         
       }
-      return row;
+      return cols;
   } 
   
 
@@ -95,32 +93,32 @@ class Game extends React.Component{
           <li key={5}>1.</li>
         </ul>
         <div className="board">
-          <div className="rank-a">
-            {this.makeBoardRow("a")}
+          <div className="col-0">
+            {this.makeBoardRow(0)}
           </div>
-          <div className="rank-b">
-            {this.makeBoardRow("b")}
+          <div className="col-1">
+            {this.makeBoardRow(1)}
           </div>
-          <div className="rank-c">
-            {this.makeBoardRow("c")}
+          <div className="col-2">
+            {this.makeBoardRow(2)}
           </div>
-          <div className="rank-d">
-            {this.makeBoardRow("d")}
+          <div className="col-3">
+            {this.makeBoardRow(3)}
           </div>
-          <div className="rank-e">
-            {this.makeBoardRow("e")}
+          <div className="col-4">
+            {this.makeBoardRow(4)}
           </div>
-          <div className="rank-f">
-            {this.makeBoardRow("f")}
+          <div className="col-5">
+            {this.makeBoardRow(5)}
           </div>
-          <div className="rank-g">
-            {this.makeBoardRow("g")}
+          <div className="col-6">
+            {this.makeBoardRow(6)}
           </div>
-          <div className="rank-h">
-            {this.makeBoardRow("h")}
+          <div className="col-7">
+            {this.makeBoardRow(7)}
           </div>
         </div>
-        <h1>{this.state.move}</h1>
+        <h1>ChessShare</h1>
       </div>
     
     );
