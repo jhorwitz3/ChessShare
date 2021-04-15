@@ -11,6 +11,7 @@ Props:
   src: the image to display
   alt: the alt of the image
   onClick: the onClick function
+  key: built-in React Component property
 */
 class Square extends React.Component{
   constructor(props){
@@ -69,11 +70,11 @@ class Game extends React.Component{
       for (let row=0;row<8;row++){
         if ((row%2 !==0 && col%2 !==0) || (row%2===0 && col%2===0)){
           cols.push(
-            <Square row={row} col={col} img={false} color={"white"}/>
+            <Square row={row} col={col} img={false} color={"white"} key={row*10 + col}/>
           )
         } else {
           cols.push(
-            <Square row={row} col={col} img={false} color={"brown"}/>
+            <Square row={row} col={col} img={false} color={"brown"} key={row*10 + col}/>
           )
         }
         
@@ -86,11 +87,8 @@ class Game extends React.Component{
     return(
       <div className="Game">
         <ul id="moves"> Moves
-          <li key={1}>1.</li>
-          <li key={2}>1.</li>
-          <li key={3}>1.</li>
-          <li key={4}>1.</li>
-          <li key={5}>1.</li>
+          <li key={1}>1. e4 e5</li>
+          <li key={2}>2. Nc3 c5</li>
         </ul>
         <div className="board">
           <div className="col-0">

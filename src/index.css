@@ -12,17 +12,13 @@ h1{
   justify-self: center;
 }
 
-h2{
-  grid-row: 1/11;
-  grid-column: 10/11;
-  background-color: lightgoldenrodyellow;
-}
-
 ul{
   grid-row: 2/11;
   grid-column: 1/2;
   background-color: gray;
   align-self:baseline;
+  justify-self: flex-start;
+  width: 100%;
   margin-top: 0;
 }
 
@@ -84,7 +80,7 @@ img{
 .Game{
   display: grid;
   grid-template-rows: 1fr 8fr 2fr;
-  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-columns: 2fr 8fr 2fr;
 }
 
 
