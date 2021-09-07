@@ -2,50 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import red_dot from './imgs/red_dot.png';
-/*
-import black_pawn from './imgs/black_pawn.png';
-import black_rook from './imgs/black_rook.png';
-import black_knight from './imgs/black_knight.png';
-import black_bishop from './imgs/black_bishop.png';
-import black_queen from './imgs/black_queen.png';
-import black_king from './imgs/black_king.png';
 
-import white_pawn from './imgs/white_pawn.png';
-import white_rook from './imgs/white_rook.png';
-import white_knight from './imgs/white_knight.png';
-import white_bishop from './imgs/white_bishop.png';
-import white_queen from './imgs/white_queen.png';
-import white_king from './imgs/white_king.png';
-*/
+// import black_pawn from './imgs/black_pawn.png';
+// import black_rook from './imgs/black_rook.png';
+// import black_knight from './imgs/black_knight.png';
+// import black_bishop from './imgs/black_bishop.png';
+// import black_queen from './imgs/black_queen.png';
+// import black_king from './imgs/black_king.png';
+
+// import white_pawn from './imgs/white_pawn.png';
+// import white_rook from './imgs/white_rook.png';
+// import white_knight from './imgs/white_knight.png';
+// import white_bishop from './imgs/white_bishop.png';
+// import white_queen from './imgs/white_queen.png';
+// import white_king from './imgs/white_king.png';
+
 
 
 const dark_color = "brown";
 const light_color = "white";
 
-/*
-Props:
-  col: current column
-  row: current row
-  src: image src 
-  alt: description of image
-  color: white or black
-  on_start: pawn on starting square -> enables two square jump
-
-class Pawn extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      col: props.col,
-      row: props.row,
-      src: props.src,
-      alt: props.alt,
-      color: props.color,
-      on_start: true,
-
-    }
-  }
-}
-*/
 
 /*
 Props:
@@ -61,64 +37,41 @@ Props:
   onClick: the onClick function
   key: built-in React Component property
 */
-class Square extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      col: props.col,
-      row: props.row,
-      piece: props.piece,
-      has_piece: props.has_piece,
-      is_piece_landing: props.is_piece_landing,
-      empty: props.empty,
-      src: red_dot,
-      alt: "a piece can land on this square",
-      color: null,
+
+function Square (props) {
+  //Check for color of square
+  let color;
+
+  if ((props.row%2===0 && props.col%2===0)
+    || (props.row%2===1 && props.col%2===1)){
+    color = light_color;
+  } else {
+    color = dark_color;
+  }
+  
+  if (props.is_piece_landing){
+    return(
+      <button className={`col-${props.col}`} id={`row-${props.row}`} 
+       style={{backgroundColor: color}}>
+        <img src={props.src} alt={props.alt}/>
+      </button>
+      );
+  } else if (props.has_piece){
+    return(
+      <button className={`col-${props.col}`} id={`row-${props.row}`} 
+      style={{backgroundColor: color}}>
+        {props.piece}
+      </button>
+      );
+  } else {
+    return (
+      <button className={`col-${props.col}`} id={`row-${props.row}`} 
+      style={{backgroundColor: color}}>
+        {props.row + " " + props.col}
+      </button>
+      );
     }
   }
-
-  is_light_color = () =>{
-    if ((this.state.row%2===0 && this.state.col%2===0)
-    || (this.state.row%2===1 && this.state.col%2===1)){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  render(){
-    let color;
-
-    if (this.is_light_color()){
-      color = light_color;
-    } else {
-      color = dark_color;
-    }
-    if (this.state.is_piece_landing){
-      return(
-        <button className={`col-${this.state.col}`} id={`row-${this.state.row}`} 
-         style={{backgroundColor: color}}>
-          <img src={this.state.src} alt={this.state.alt}/>
-        </button>
-        );
-    } else if (this.state.has_piece){
-      return(
-        <button className={`col-${this.state.col}`} id={`row-${this.state.row}`} 
-        style={{backgroundColor: color}}>
-          {this.state.piece}
-        </button>
-        );
-    } else {
-      return (
-        <button className={`col-${this.state.col}`} id={`row-${this.state.row}`} 
-        style={{backgroundColor: color}}>
-          {this.state.row + " " + this.state.col}
-        </button>
-        );
-      }
-    }
-  }
-
 
 
 class Game extends React.Component{
@@ -126,24 +79,41 @@ class Game extends React.Component{
     super(props);
     this.state = {
       move: 0,
-      squares: Array(64).fill(null).map((square, index) =>{
-        square = <Square row={index %8} col={Math.floor(index/8)} empty={true}
-        has_piece={false} is_piece_landing={false}/>
-        return square;
-      }),
+      squares: Array(64).fill(null)
     }
   }
 
+  resetBoard = () => {
+    const squares = this.state.squares.slice();
+
+    for (let i=1;i<63;i+=8){
+      squares[i] = 'p';
+    }
+    this.setState({squares: squares})
+    
+  }
+
+
   renderSquare = (index) => {
-    return (
-      this.state.squares[index]
-    );
+    if (this.state.squares[index] === 'p') {
+      return (
+        <Square row={index %8} col={Math.floor(index/8)} has_piece={false}
+        is_piece_landing={true} empty= {true} src={red_dot}/>
+      );
+    } else {
+      return (
+        <Square row={index %8} col={Math.floor(index/8)} has_piece={false}
+        is_piece_landing={false} empty= {true}/>
+      );
+    }
+    
     
   }
   render() {
     return (
       <div className="Game">
         <h1>ChessShare</h1>
+        <button onClick={this.resetBoard}>Reset Board</button>
       <div className="board">
       <div className="col-0" >
           {this.renderSquare(0)}
