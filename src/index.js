@@ -1,23 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import red_dot from './imgs/red_dot.png';
-
-// import black_pawn from './imgs/black_pawn.png';
-// import black_rook from './imgs/black_rook.png';
-// import black_knight from './imgs/black_knight.png';
-// import black_bishop from './imgs/black_bishop.png';
-// import black_queen from './imgs/black_queen.png';
-// import black_king from './imgs/black_king.png';
-
-// import white_pawn from './imgs/white_pawn.png';
-// import white_rook from './imgs/white_rook.png';
-// import white_knight from './imgs/white_knight.png';
-// import white_bishop from './imgs/white_bishop.png';
-// import white_queen from './imgs/white_queen.png';
-// import white_king from './imgs/white_king.png';
-
-
+import {getPiece} from './jaredlib.js';
+// import red_dot from './imgs/red_dot.png';
 
 const dark_color = "brown";
 const light_color = "white";
@@ -60,7 +45,7 @@ function Square (props) {
     return(
       <button className={`col-${props.col}`} id={`row-${props.row}`} 
       style={{backgroundColor: color}}>
-        {props.piece}
+        <img src={props.piece} alt={props.alt}/> 
       </button>
       );
   } else {
@@ -83,31 +68,59 @@ class Game extends React.Component{
     }
   }
 
+
+
   resetBoard = () => {
     const squares = this.state.squares.slice();
 
-    for (let i=1;i<63;i+=8){
-      squares[i] = 'p';
+    //setup black pieces on back row
+    const black_pieces = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br'];
+    let j = 0;
+    for (let i=0;i<63;i+=8){
+      squares[i] = black_pieces[j]
+      j++;
     }
+    //setup black pawns
+    for (let i=1;i<63;i+=8){
+      squares[i] = 'bp';
+    }
+
+    
+    //setup black pieces on back row
+    const white_pieces = ['wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr'];
+    let k = 0;
+    for (let i=7;i<=63;i+=8){
+      squares[i] = white_pieces[k]
+      k++;
+    }
+    //setup white pawns
+    for (let i=6;i<63;i+=8){
+      squares[i] = 'wp';
+    }
+
     this.setState({squares: squares})
     
   }
 
 
   renderSquare = (index) => {
-    if (this.state.squares[index] === 'p') {
-      return (
-        <Square row={index %8} col={Math.floor(index/8)} has_piece={false}
-        is_piece_landing={true} empty= {true} src={red_dot}/>
-      );
-    } else {
-      return (
-        <Square row={index %8} col={Math.floor(index/8)} has_piece={false}
-        is_piece_landing={false} empty= {true}/>
-      );
-    }
+    const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
+                             'wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr', 'wp'];
     
+    //check if current square holds a piece
+    if (piece_notations.includes(this.state.squares[index])) {
+      //getPiece imported from jaredlib!
+      let {piece, alt} = getPiece(this.state.squares[index]);
+      //return the square with the piece on it
+      return (<Square row={index %8} col={Math.floor(index/8)} has_piece={true}
+      is_piece_landing={false} empty= {true} piece={piece} alt={alt}/>);
+    } 
     
+    //otherwise return empty square
+    else {
+      return (<Square row={index %8} col={Math.floor(index/8)} has_piece={false}
+                    is_piece_landing={false} empty= {true}/>);
+    }          
   }
   render() {
     return (
@@ -200,6 +213,7 @@ class Game extends React.Component{
     );
   } 
 }
+
 
        
 // ========================================
