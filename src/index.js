@@ -4,9 +4,12 @@ import './index.css';
 import {getPiece, setupBoard} from './jaredlib.js';
 
 
-const dark_color = "brown";
+const dark_color = "peru";
+const alt_dark_color = "yellow"
 const light_color = "white";
-
+const alt_light_color = "yellow"
+const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
+                             'wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr', 'wp'];
 
 /*
 Props:
@@ -28,14 +31,14 @@ function Square (props) {
 
   if ((props.row%2===0 && props.col%2===0)
     || (props.row%2===1 && props.col%2===1)){
-    color = light_color;
+    color = props.highlight ? alt_light_color: light_color;
   } else {
-    color = dark_color;
+    color = props.highlight ? alt_dark_color: dark_color;
   }
   
 
   //NOTE: pass params from Game to Square (https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-to-method)
-  if (props.has_piece || props.is_piece_landing){
+  if (props.has_piece){
     return(
       <button className={`col-${props.col}`} id={`row-${props.row}`} 
       style={{backgroundColor: color}} onClick={() => props.handleClick(props.index)}>
@@ -76,11 +79,10 @@ class Game extends React.Component{
     const squares = this.state.squares.slice();
     let pendingDropIdx = this.state.pendingDropIdx;
 
-    //if piece isn't pending drop (first click), preserve index to update later, darken bg color
+    //if piece isn't pending drop (first click), preserve index to update later, highlight bg color
     if (!pendingDrop) {
       pendingDropIdx = index;
       this.setState({pendingDropIdx: pendingDropIdx});
-      //TODO darken bg color
     } 
     //otherwise, move the original piece to the new location
     else {
@@ -94,25 +96,30 @@ class Game extends React.Component{
     this.setState({pendingDrop: !pendingDrop}); 
   }
 
-  renderSquare = (index) => {
-    const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
-                             'wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr', 'wp'];
-    
+  renderSquare = (index) => {  
+    //check if square should be highlighted because it was clicked
+    let highlight;
+    if (index === this.state.pendingDropIdx && this.state.pendingDrop){
+      highlight = true;} else {highlight = false;}
+
     //check if current square holds a piece
     if (piece_notations.includes(this.state.squares[index])) {
       //getPiece imported from jaredlib!
       let {piece, alt} = getPiece(this.state.squares[index]);
       //return the square with the piece on it
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={true}
-      is_piece_landing={false} index={index} piece={piece} alt={alt} handleClick={this.handleClick}/>);
+      is_piece_landing={false} index={index} piece={piece} alt={alt} highlight={highlight}
+      handleClick={this.handleClick}/>);
     } 
     
     //otherwise return empty square
     else {
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={false}
-                    is_piece_landing={false} index={index} handleClick={this.handleClick}/>);
+                    is_piece_landing={false} index={index} highlight={highlight} 
+                    handleClick={this.handleClick}/>);
     }          
   }
+
   render() {
     return (
       <div className="Game">
