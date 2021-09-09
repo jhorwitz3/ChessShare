@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {getPiece} from './jaredlib.js';
-// import red_dot from './imgs/red_dot.png';
+import {getPiece, setupBoard} from './jaredlib.js';
+
 
 const dark_color = "brown";
 const light_color = "white";
@@ -10,17 +10,16 @@ const light_color = "white";
 
 /*
 Props:
-  rank: The column of the square
-  file: the row of the square
+  col: The column of the square
+  row: the row of the square
   has_piece: display the piece
-  piece: the piece
+  piece: the piece img
   is_piece_landing: true if a currently clicked piece can land on this square
   empty: square is empty
   src: the src image red dot to indicate piecelanding
   alt: the alt of the image
   color: square-color, brown or white
   onClick: the onClick function
-  key: built-in React Component property
 */
 
 function Square (props) {
@@ -34,25 +33,19 @@ function Square (props) {
     color = dark_color;
   }
   
-  if (props.is_piece_landing){
+
+  //NOTE: pass params from Game to Square (https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-to-method)
+  if (props.has_piece || props.is_piece_landing){
     return(
       <button className={`col-${props.col}`} id={`row-${props.row}`} 
-       style={{backgroundColor: color}}>
-        <img src={props.src} alt={props.alt}/>
-      </button>
-      );
-  } else if (props.has_piece){
-    return(
-      <button className={`col-${props.col}`} id={`row-${props.row}`} 
-      style={{backgroundColor: color}}>
-        <img src={props.piece} alt={props.alt}/> 
+      style={{backgroundColor: color}} onClick={() => props.handleClick(props.index)}>
+        <img src={props.piece} alt={props.alt} id='piece'/>
       </button>
       );
   } else {
     return (
       <button className={`col-${props.col}`} id={`row-${props.row}`} 
-      style={{backgroundColor: color}}>
-        {props.row + " " + props.col}
+      style={{backgroundColor: color}} onClick={() => props.handleClick(props.index)}>
       </button>
       );
     }
@@ -64,44 +57,42 @@ class Game extends React.Component{
     super(props);
     this.state = {
       move: 0,
+      pendingDrop: false,
+      pendingDropIdx: null,
       squares: Array(64).fill(null)
     }
   }
 
-
-
   resetBoard = () => {
-    const squares = this.state.squares.slice();
-
-    //setup black pieces on back row
-    const black_pieces = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br'];
-    let j = 0;
-    for (let i=0;i<63;i+=8){
-      squares[i] = black_pieces[j]
-      j++;
-    }
-    //setup black pawns
-    for (let i=1;i<63;i+=8){
-      squares[i] = 'bp';
-    }
-
-    
-    //setup black pieces on back row
-    const white_pieces = ['wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr'];
-    let k = 0;
-    for (let i=7;i<=63;i+=8){
-      squares[i] = white_pieces[k]
-      k++;
-    }
-    //setup white pawns
-    for (let i=6;i<63;i+=8){
-      squares[i] = 'wp';
-    }
-
+    //setupBoard imported from jaredlib!
+    const squares = setupBoard();
     this.setState({squares: squares})
     
   }
 
+  //On click, flip boolean pendingDrop, update squares array
+  handleClick = (index) => {
+    const pendingDrop = this.state.pendingDrop;
+    const squares = this.state.squares.slice();
+    let pendingDropIdx = this.state.pendingDropIdx;
+
+    //if piece isn't pending drop (first click), preserve index to update later, darken bg color
+    if (!pendingDrop) {
+      pendingDropIdx = index;
+      this.setState({pendingDropIdx: pendingDropIdx});
+      //TODO darken bg color
+    } 
+    //otherwise, move the original piece to the new location
+    else {
+      //TODO: check if move is valid
+      squares[index] = squares[pendingDropIdx];
+      squares[pendingDropIdx] = null;
+    }
+    
+    //update squares array to hold new values, pendingDrop flips
+    this.setState({squares: squares});
+    this.setState({pendingDrop: !pendingDrop}); 
+  }
 
   renderSquare = (index) => {
     const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
@@ -113,13 +104,13 @@ class Game extends React.Component{
       let {piece, alt} = getPiece(this.state.squares[index]);
       //return the square with the piece on it
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={true}
-      is_piece_landing={false} empty= {true} piece={piece} alt={alt}/>);
+      is_piece_landing={false} index={index} piece={piece} alt={alt} handleClick={this.handleClick}/>);
     } 
     
     //otherwise return empty square
     else {
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={false}
-                    is_piece_landing={false} empty= {true}/>);
+                    is_piece_landing={false} index={index} handleClick={this.handleClick}/>);
     }          
   }
   render() {

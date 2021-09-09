@@ -11,77 +11,112 @@ import white_knight from './imgs/white_knight.png';
 import white_bishop from './imgs/white_bishop.png';
 import white_queen from './imgs/white_queen.png';
 import white_king from './imgs/white_king.png';
-  
-  //helper method to get the image and description of the piece
-  export function getPiece(piece_notation){
-    let piece;
-    let alt;
 
-    switch (piece_notation) {
-      //black pieces
-      case 'bp':
-            piece = black_pawn;
-            alt = 'black pawn';
-            break;
-      case 'br':
-        piece = black_rook;
-        alt = 'black rook';
-        break;
-      case 'bn':
-        piece = black_knight;
-        alt = 'black knight';
-        break;      
-      case 'blb':
-          piece = black_bishop;
-          alt = 'black light-squared bishop';
-          break;
-      case 'bdb':
-        piece = black_bishop;
-        alt = 'black dark-squared bishop';
-        break;
-      case 'bq':
-        piece = black_queen;
-        alt = 'black pawn';
-        break;
-      case 'bk':
-        piece = black_king;
-        alt = 'black pawn';
-        break;
-      
-      //white pieces
-      case 'wp':
-        piece = white_pawn;
-        alt = 'white pawn';
-        break;
-      case 'wr':
-        piece = white_rook;
-        alt = 'white rook';
-        break;
-      case 'wn':
-        piece = white_knight;
-        alt = 'white knight';
-        break;      
-      case 'wlb':
-          piece = white_bishop;
-          alt = 'white light-squared bishop';
-          break;
-      case 'wdb':
-        piece = white_bishop;
-        alt = 'white dark-squared bishop';
-        break;
-      case 'wq':
-        piece = white_queen;
-        alt = 'white pawn';
-        break;
-      case 'wk':
-        piece = white_king;
-        alt = 'white pawn';
-        break;
+import red_dot from './imgs/red_dot.png';
 
-      default:
-        console.log('Unexpected type');
-        break;
-    }
+export function setupBoard(){
+  const squares = Array(64).fill(null);
 
-    return {piece, alt};
+  //setup black pieces on back row
+  const black_pieces = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br'];
+  let j = 0;
+  for (let i=0;i<63;i+=8){
+    squares[i] = black_pieces[j]
+    j++;
   }
+  //setup black pawns
+  for (let i=1;i<63;i+=8){
+    squares[i] = 'bp';
+  }
+
+  //setup black pieces on back row
+  const white_pieces = ['wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr'];
+  let k = 0;
+  for (let i=7;i<=63;i+=8){
+    squares[i] = white_pieces[k]
+    k++;
+  }
+  //setup white pawns
+  for (let i=6;i<63;i+=8){
+    squares[i] = 'wp';
+  }
+
+  return squares;
+}
+
+//helper method to get the image and description of the piece
+export function getPiece(piece_notation){
+  let piece;
+  let alt;
+
+  switch (piece_notation) {
+    //black pieces
+    case 'bp':
+          piece = black_pawn;
+          alt = 'black pawn';
+          break;
+    case 'br':
+      piece = black_rook;
+      alt = 'black rook';
+      break;
+    case 'bn':
+      piece = black_knight;
+      alt = 'black knight';
+      break;      
+    case 'blb':
+        piece = black_bishop;
+        alt = 'black light-squared bishop';
+        break;
+    case 'bdb':
+      piece = black_bishop;
+      alt = 'black dark-squared bishop';
+      break;
+    case 'bq':
+      piece = black_queen;
+      alt = 'black pawn';
+      break;
+    case 'bk':
+      piece = black_king;
+      alt = 'black pawn';
+      break;
+    
+    //white pieces
+    case 'wp':
+      piece = white_pawn;
+      alt = 'white pawn';
+      break;
+    case 'wr':
+      piece = white_rook;
+      alt = 'white rook';
+      break;
+    case 'wn':
+      piece = white_knight;
+      alt = 'white knight';
+      break;      
+    case 'wlb':
+        piece = white_bishop;
+        alt = 'white light-squared bishop';
+        break;
+    case 'wdb':
+      piece = white_bishop;
+      alt = 'white dark-squared bishop';
+      break;
+    case 'wq':
+      piece = white_queen;
+      alt = 'white pawn';
+      break;
+    case 'wk':
+      piece = white_king;
+      alt = 'white pawn';
+      break;
+    case 'DOT':
+      piece = red_dot;
+      alt = 'landing square';
+      break;
+    default:
+      console.log('Unexpected type');
+      break;
+  }
+
+  return {piece, alt};
+}
