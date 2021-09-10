@@ -4,7 +4,7 @@ import './index.css';
 import {getPiece, setupBoard} from './jaredlib.js';
 
 
-const dark_color = "peru";
+const dark_color = "pink";
 const alt_dark_color = "yellow"
 const light_color = "white";
 const alt_light_color = "yellow"
@@ -86,9 +86,10 @@ class Game extends React.Component{
     } 
     //otherwise, move the original piece to the new location
     else {
-      //TODO: check if move is valid
-      squares[index] = squares[pendingDropIdx];
+      //Set null first, then place piece so double-click doesn't delete piece
+      let val = squares[pendingDropIdx];
       squares[pendingDropIdx] = null;
+      squares[index] = val;
     }
     
     //update squares array to hold new values, pendingDrop flips
