@@ -5,11 +5,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## TODO
 
 - Change to Chess Board 8x8 ✔
-- Calculate Possible Moves based on which piece it is
-- Show Possible Moves using a dot in the center of the square
-- Enable Piece Moves to viable spots
+- Enable Piece Moves to viable spots ✔
 - Drag and Drop (https://react-dnd.github.io/react-dnd/about)
-- Remove Pieces from Board if captured
+- Remove Pieces from Board if captured ✔
+- Display move history, allow "time-travel" ✔
 - Document Moves Using Chess Notation
 - Build Backend with Nodejs
 

@@ -4,7 +4,7 @@ import './index.css';
 import {getPiece, setupBoard} from './jaredlib.js';
 
 
-const dark_color = "pink";
+const dark_color = "peru";
 const alt_dark_color = "yellow"
 const light_color = "white";
 const alt_light_color = "yellow"
@@ -55,78 +55,34 @@ function Square (props) {
   }
 
 
-class Game extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      move: 0,
-      pendingDrop: false,
-      pendingDropIdx: null,
-      squares: Array(64).fill(null)
-    }
-  }
-
-  resetBoard = () => {
-    //setupBoard imported from jaredlib!
-    const squares = setupBoard();
-    this.setState({squares: squares})
-    
-  }
-
-  //On click, flip boolean pendingDrop, update squares array
-  handleClick = (index) => {
-    const pendingDrop = this.state.pendingDrop;
-    const squares = this.state.squares.slice();
-    let pendingDropIdx = this.state.pendingDropIdx;
-
-    //if piece isn't pending drop (first click), preserve index to update later, highlight bg color
-    if (!pendingDrop) {
-      pendingDropIdx = index;
-      this.setState({pendingDropIdx: pendingDropIdx});
-    } 
-    //otherwise, move the original piece to the new location
-    else {
-      //Set null first, then place piece so double-click doesn't delete piece
-      let val = squares[pendingDropIdx];
-      squares[pendingDropIdx] = null;
-      squares[index] = val;
-    }
-    
-    //update squares array to hold new values, pendingDrop flips
-    this.setState({squares: squares});
-    this.setState({pendingDrop: !pendingDrop}); 
-  }
-
+class Board extends React.Component{
   renderSquare = (index) => {  
     //check if square should be highlighted because it was clicked
     let highlight;
-    if (index === this.state.pendingDropIdx && this.state.pendingDrop){
+    if (index === this.props.pendingDropIdx && this.props.pendingDrop){
       highlight = true;} else {highlight = false;}
 
     //check if current square holds a piece
-    if (piece_notations.includes(this.state.squares[index])) {
+    if (piece_notations.includes(this.props.squares[index])) {
       //getPiece imported from jaredlib!
-      let {piece, alt} = getPiece(this.state.squares[index]);
+      let {piece, alt} = getPiece(this.props.squares[index]);
       //return the square with the piece on it
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={true}
       is_piece_landing={false} index={index} piece={piece} alt={alt} highlight={highlight}
-      handleClick={this.handleClick}/>);
+      handleClick={this.props.handleClick}/>);
     } 
     
     //otherwise return empty square
     else {
       return (<Square row={index %8} col={Math.floor(index/8)} has_piece={false}
                     is_piece_landing={false} index={index} highlight={highlight} 
-                    handleClick={this.handleClick}/>);
+                    handleClick={this.props.handleClick}/>);
     }          
   }
 
-  render() {
+  render(){
     return (
-      <div className="Game">
-        <h1>ChessShare</h1>
-        <button onClick={this.resetBoard}>Reset Board</button>
-      <div className="board">
+    <div className="board">
       <div className="col-0" >
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -207,7 +163,78 @@ class Game extends React.Component{
           {this.renderSquare(62)}
           {this.renderSquare(63)}
         </div>
-      </div>
+      </div> );
+  }
+}
+
+class Game extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      pendingDrop: false,
+      pendingDropIdx: null,
+      move: 0,
+      history: [setupBoard()]
+    }
+  }
+
+  //On click, flip boolean pendingDrop, update squares array
+  handleClick = (index) => {
+    const pendingDrop = this.state.pendingDrop;
+    const squares = this.state.history[this.state.move].slice();
+    const history = this.state.history.slice();
+    let pendingDropIdx = this.state.pendingDropIdx;
+
+    //if piece isn't pending drop (first click), preserve index to update later, highlight bg color
+    if (!pendingDrop) {
+      pendingDropIdx = index;
+      this.setState({pendingDropIdx: pendingDropIdx});
+    } 
+    //otherwise, move the original piece to the new location
+    else {
+      //Set null first, then place piece so double-click doesn't delete piece
+      let val = squares[pendingDropIdx];
+      squares[pendingDropIdx] = null;
+      squares[index] = val;
+      history.push(squares);
+      this.setState({move: this.state.move+1})
+    }
+    
+    //update squares array to hold new values, pendingDrop flips
+    
+    this.setState({history: history});
+    this.setState({pendingDrop: !pendingDrop}); 
+  }
+
+  //TODO: This works, but only for the game played through once. Need to rewrite history
+  jumpTo(move){
+    const history = this.state.history.slice(0, move+1);
+    this.setState({history: history});
+    this.setState({move: move});
+    this.setState({pendingDrop: false});
+  }
+
+
+  render() {
+    const history = this.state.history;
+    const moves = history.map((step, move) => {
+    const desc = move ? 'Move #' + move : 'Game start';
+    
+      return (
+      <li key={move}>
+        <button onClick={() => this.jumpTo(move)}>{desc}</button>
+      </li>
+    );  
+    });
+
+    return (
+      <div className="Game">
+        <h1>ChessShare</h1>
+        <ul>{moves}</ul>
+        <div classname="b">
+          {<Board squares={this.state.history[this.state.move]} pendingDrop={this.state.pendingDrop}
+          pendingDropIdx={this.state.pendingDropIdx} handleClick={this.handleClick}/>}
+        </div>
       </div>
     );
   } 

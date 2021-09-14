@@ -3,6 +3,7 @@ Global Variables
 */
 :root{
   --square_size: 60px;
+  --row-position: 2/3;
 }
 
 h1{
@@ -22,8 +23,14 @@ ul{
   grid-column: 1/2;
   background-color: gray;
   margin-top: 0;
+  list-style-type: none; /*no bullet points*/
+  padding: 0;
+  margin: 0;
 }
 
+li {
+  width: 100%;
+}
 
 button{
   position: inherit;
@@ -48,12 +55,9 @@ img {
 
 
 .board{
-  grid-row: 3/4;
-  grid-column: 2/3;
   display: grid;
-  grid-template-rows:  repeat(8, var(--square_size));
+  grid-template-rows:  repeat(10, var(--square_size));
   grid-template-columns: repeat(8, var(--square_size));
-  align-content: center;
   justify-content: center;
 }
 
@@ -64,40 +68,40 @@ grid row was 3/4 for all, grid-col started at 3/4 and incremented by 1
 
 .col-0{
   grid-column: 1/2;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-1{
   grid-column: 2/3;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-2{
   grid-column: 3/4;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-3{
   grid-column: 4/5;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-4{
   grid-column: 5/6;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-5{
   grid-column: 6/7;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-6{
   grid-column: 7/8;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 .col-7{
   grid-column: 8/9;
-  grid-row: 1/2;
+  grid-row: var(--row-position);
 }
 
 .Game{
   display: grid;
-  grid-template-rows: 1fr 1fr 8fr 2fr;
+  grid-template-rows: 1fr 10fr 1fr;
   grid-template-columns: 2fr 8fr 2fr;
 }
 
