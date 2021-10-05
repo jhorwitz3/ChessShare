@@ -14,6 +14,13 @@ import white_king from './imgs/white_king.png';
 
 import red_dot from './imgs/red_dot.png';
 
+export const dark_color = "peru";
+export const alt_dark_color = "yellow"
+export const light_color = "white";
+export const alt_light_color = "yellow"
+export const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
+                             'wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr', 'wp'];
+
 export function setupBoard(){
   const squares = Array(64).fill(null);
 

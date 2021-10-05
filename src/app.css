@@ -1,0 +1,13 @@
+.app-header{
+    display: grid;
+    color: aliceblue;
+    background-color: darkslategray;
+    text-align: center;
+    grid-template-columns: 1fr 10fr 1fr;
+  }
+h1{
+    grid-column: 2/3;
+}
+ #sign-out {
+    grid-column: 3/4;
+  }
