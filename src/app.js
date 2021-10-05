@@ -36,7 +36,7 @@ export function App(){
                 <SignOut/>
                 
             </header>
-            <section className>
+            <section className="main-section">
                 {/**user is null if not signed in */}
                 {user ? <Game/> : <SignIn/>}
                 
