@@ -96,6 +96,7 @@ Global Variables
     display: grid;
     grid-template-rows: calc(100vh - 100px);
     grid-template-columns: 8fr 2fr;
+    grid-column: 1/4;
   }
   
   

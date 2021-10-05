@@ -8,6 +8,20 @@
 h1{
     grid-column: 2/3;
 }
- #sign-out {
-    grid-column: 3/4;
-  }
+
+#sign-out {
+  grid-column: 3/4;
+}
+
+.main-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 4fr 2fr 4fr;
+  height: 100vh;
+}
+
+.sign-in {
+  height: 100%;
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
