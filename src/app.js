@@ -1,6 +1,5 @@
 import React from "react";
 import './app.css';
-
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
@@ -8,7 +7,7 @@ import 'firebase/compat/auth';
 import {useAuthState} from 'react-firebase-hooks/auth';
 //import {useCollectionData} from 'react-firebase-hooks/firestore';
 
-import {Game} from './game.js'
+import Dashboard from './Dashboard.js'
 
 firebase.initializeApp({
   apiKey: "AIzaSyCieVGIAwBwgZAjuKNCKc_QmUw3MNuBQPI",
@@ -38,7 +37,7 @@ export function App(){
             </header>
             <section className="main-section">
                 {/**user is null if not signed in */}
-                {user ? <Game/> : <SignIn/>}
+                {user ? <Dashboard/> : <SignIn/>}
                 
             </section>
         </div>
@@ -46,18 +45,13 @@ export function App(){
 }
 
 function SignIn() {
-
     const signInWithGoogle = () => {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider);
     }
-  
-    return (
-      
-        <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
-      
+    return ( 
+        <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>  
     )
-  
   }
   
   function SignOut() {

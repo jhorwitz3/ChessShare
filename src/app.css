@@ -24,4 +24,18 @@ h1{
   height: 100%;
   grid-column: 2/3;
   grid-row: 2/3;
+  background-color: darkslategray;
+  font-size: 30pt;
+}
+
+.current_game {
+  width: 100%;
+  grid-column: 1/4;
+  grid-row: 2/3;
+}
+
+.current_game_backbutton{
+  background-color: blue;
+  width: 20%;
+  height: 5vh;
 }

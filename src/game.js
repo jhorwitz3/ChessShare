@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './game.css';
+import game from './imgs/game.PNG';
 import {getPiece, setupBoard, dark_color, alt_dark_color,
         light_color, alt_light_color, piece_notations} from './jaredlib.js';
 
@@ -160,6 +161,23 @@ class Board extends React.Component{
   }
 }
 
+
+/**TODO make a hyperlinked list of games, user can create games and 
+ * their state is preserved
+ * In order to achieve this, need to pass the game state to the Game class using props
+ * Store game states in FireBase
+ * Need to get "screenshot" or last position
+ */
+function UserGames () {
+  return (
+      <ul className="my-games"> 
+        <h2 id="mygames-header">My Games</h2>
+        <li> <img src={game} alt="board"/></li>
+      </ul>
+
+  )
+}
+
 export class Game extends React.Component{
   constructor(props){
     super(props);
@@ -206,7 +224,16 @@ export class Game extends React.Component{
     this.setState({move: move});
     this.setState({pendingDrop: false});
   }
-
+  
+  BoardToString(){
+    const squares = this.state.history[this.state.move];
+    let str = "";
+    for (let i=0;i<squares.length-1;i++){
+      str += squares[i] + "-";
+    }
+    str += squares[squares.length-1];
+    return str;
+  }
 
   render() {
     const history = this.state.history;
@@ -222,10 +249,15 @@ export class Game extends React.Component{
 
     return (
       <div className="Game">
-        <ul>{moves}</ul>
+        <ul className="moves">{moves}</ul>
+        <p>{this.BoardToString()}</p>
+         <UserGames/>
           {<Board squares={this.state.history[this.state.move]} pendingDrop={this.state.pendingDrop}
           pendingDropIdx={this.state.pendingDropIdx} handleClick={this.handleClick}/>}
       </div>
     );
   } 
 }
+
+
+
