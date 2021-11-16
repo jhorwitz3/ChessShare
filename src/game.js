@@ -2,7 +2,7 @@ import React from 'react';
 
 import './game.css';
 import game from './imgs/game.PNG';
-import {getPiece, setupBoard, dark_color, alt_dark_color,
+import {getPiece, setupBoard, boardToString, dark_color, alt_dark_color,
         light_color, alt_light_color, piece_notations} from './jaredlib.js';
 
 /*
@@ -34,14 +34,14 @@ function Square (props) {
   //NOTE: pass params from Game to Square (https://stackoverflow.com/questions/29810914/react-js-onclick-cant-pass-value-to-method)
   if (props.has_piece){
     return(
-      <button className={`col-${props.col}`} id={`row-${props.row}`} 
+      <button className={`col-${props.col}`} id={"ignore-bs"} 
       style={{backgroundColor: color}} onClick={() => props.handleClick(props.index)}>
         <img src={props.piece} alt={props.alt} id='piece'/>
       </button>
       );
   } else {
     return (
-      <button className={`col-${props.col}`} id={`row-${props.row}`} 
+      <button className={`col-${props.col}`} id={"ignore-bs"} 
       style={{backgroundColor: color}} onClick={() => props.handleClick(props.index)}>
       </button>
       );
@@ -225,15 +225,6 @@ export class Game extends React.Component{
     this.setState({pendingDrop: false});
   }
   
-  BoardToString(){
-    const squares = this.state.history[this.state.move];
-    let str = "";
-    for (let i=0;i<squares.length-1;i++){
-      str += squares[i] + "-";
-    }
-    str += squares[squares.length-1];
-    return str;
-  }
 
   render() {
     const history = this.state.history;
@@ -248,9 +239,9 @@ export class Game extends React.Component{
     });
 
     return (
-      <div className="Game">
+      <div id="ignore-bs" className="Game">
         <ul className="moves">{moves}</ul>
-        <p>{this.BoardToString()}</p>
+        <p>{boardToString(this.state.history[this.state.move])}</p>
          <UserGames/>
           {<Board squares={this.state.history[this.state.move]} pendingDrop={this.state.pendingDrop}
           pendingDropIdx={this.state.pendingDropIdx} handleClick={this.handleClick}/>}

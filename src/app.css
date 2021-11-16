@@ -28,13 +28,22 @@ h1{
   font-size: 30pt;
 }
 
-.current_game {
+.dashboard {
+  display: flex;
   width: 100%;
   grid-column: 1/4;
   grid-row: 2/3;
+  justify-content: center;
+  align-content: center;
 }
 
 .current_game_backbutton{
+  background-color: blue;
+  width: 20%;
+  height: 5vh;
+}
+
+#newgame_button{
   background-color: blue;
   width: 20%;
   height: 5vh;

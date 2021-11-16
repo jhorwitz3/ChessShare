@@ -20,35 +20,51 @@ export const light_color = "white";
 export const alt_light_color = "yellow"
 export const piece_notations = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br', 'bp', 
                              'wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr', 'wp'];
+                
+export const newBoard_str = "br-bp-null-null-null-null-wp-wr-bn-bp-null-null-null-null-wp-wn-blb-bp-null-null-null-null-wp-wlb-bq-bp-null-null-null-null-wp-wq-bk-bp-null-null-null-null-wp-wk-bdb-bp-null-null-null-null-wp-wdb-bn-bp-null-null-null-null-wp-wn-br-bp-null-null-null-null-wp-wr"; 
 
-export function setupBoard(){
-  const squares = Array(64).fill(null);
+export function boardToString(squares){
+  let str = "";
+  for (let i=0;i<squares.length-1;i++){
+    str += squares[i] + "-";
+  }
+  str += squares[squares.length-1];
+  return str;
+}
 
-  //setup black pieces on back row
-  const black_pieces = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br'];
-  let j = 0;
-  for (let i=0;i<63;i+=8){
-    squares[i] = black_pieces[j]
-    j++;
-  }
-  //setup black pawns
-  for (let i=1;i<63;i+=8){
-    squares[i] = 'bp';
-  }
+export function setupBoard(board_string){
+  if (board_string == null){
+    board_string = newBoard_str;
+  } 
 
-  //setup black pieces on back row
-  const white_pieces = ['wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr'];
-  let k = 0;
-  for (let i=7;i<=63;i+=8){
-    squares[i] = white_pieces[k]
-    k++;
-  }
-  //setup white pawns
-  for (let i=6;i<63;i+=8){
-    squares[i] = 'wp';
-  }
-
+  const squares = board_string.split('-');
   return squares;
+
+  // //setup black pieces on back row
+  // const black_pieces = ['br', 'bn', 'blb', 'bq', 'bk', 'bdb', 'bn', 'br'];
+  // let j = 0;
+  // for (let i=0;i<63;i+=8){
+  //   squares[i] = black_pieces[j]
+  //   j++;
+  // }
+  // //setup black pawns
+  // for (let i=1;i<63;i+=8){
+  //   squares[i] = 'bp';
+  // }
+
+  // //setup black pieces on back row
+  // const white_pieces = ['wr', 'wn', 'wlb', 'wq', 'wk', 'wdb', 'wn', 'wr'];
+  // let k = 0;
+  // for (let i=7;i<=63;i+=8){
+  //   squares[i] = white_pieces[k]
+  //   k++;
+  // }
+  // //setup white pawns
+  // for (let i=6;i<63;i+=8){
+  //   squares[i] = 'wp';
+  // }
+
+  // return squares;
 }
 
 //helper method to get the image and description of the piece

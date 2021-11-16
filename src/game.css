@@ -110,6 +110,10 @@ Global Variables
 #mygames-header{
   background-color: white;
 }
+
+#ignore-bs{
+  flex:none;
+}
   
   
   
