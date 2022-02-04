@@ -1,10 +1,9 @@
 import React from 'react';
 
 import './game.css';
-import game from './imgs/game.PNG';
 import {getPiece, setupBoard, boardToString, dark_color, alt_dark_color,
         light_color, alt_light_color, piece_notations} from './jaredlib.js';
-
+import { updateGame } from './fireConfig';
 /*
 Props:
   col: The column of the square
@@ -162,22 +161,6 @@ class Board extends React.Component{
 }
 
 
-/**TODO make a hyperlinked list of games, user can create games and 
- * their state is preserved
- * In order to achieve this, need to pass the game state to the Game class using props
- * Store game states in FireBase
- * Need to get "screenshot" or last position
- */
-function UserGames () {
-  return (
-      <ul className="my-games"> 
-        <h2 id="mygames-header">My Games</h2>
-        <li> <img src={game} alt="board"/></li>
-      </ul>
-
-  )
-}
-
 export class Game extends React.Component{
   constructor(props){
     super(props);
@@ -185,7 +168,7 @@ export class Game extends React.Component{
       pendingDrop: false,
       pendingDropIdx: null,
       move: 0,
-      history: [setupBoard()]
+      history: (props.game == null) ? [setupBoard()] : [setupBoard(props.game)],
     }
   }
 
@@ -212,7 +195,8 @@ export class Game extends React.Component{
     }
     
     //update squares array to hold new values, pendingDrop flips
-    
+    // this.props.gameRef.update({"Board": boardToString(squares)});   //update db
+    updateGame(this.props.id, boardToString(squares));
     this.setState({history: history});
     this.setState({pendingDrop: !pendingDrop}); 
   }
@@ -223,6 +207,8 @@ export class Game extends React.Component{
     this.setState({history: history});
     this.setState({move: move});
     this.setState({pendingDrop: false});
+
+    
   }
   
 
@@ -239,10 +225,8 @@ export class Game extends React.Component{
     });
 
     return (
-      <div id="ignore-bs" className="Game">
+      <div className="Game">
         <ul className="moves">{moves}</ul>
-        <p>{boardToString(this.state.history[this.state.move])}</p>
-         <UserGames/>
           {<Board squares={this.state.history[this.state.move]} pendingDrop={this.state.pendingDrop}
           pendingDropIdx={this.state.pendingDropIdx} handleClick={this.handleClick}/>}
       </div>

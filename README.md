@@ -6,11 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Change to Chess Board 8x8 ✔
 - Enable Piece Moves to viable spots ✔
-- Drag and Drop (https://react-dnd.github.io/react-dnd/about)
 - Remove Pieces from Board if captured ✔
 - Display move history, allow "time-travel" ✔
-- Document Moves Using Chess Notation
-- Build Backend with Nodejs
+- Document Moves Using Chess Notation ✔
+- Build Backend with Firebase ✔
 
 
 ## Available Scripts
@@ -79,3 +78,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+

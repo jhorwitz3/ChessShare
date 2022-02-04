@@ -43,8 +43,17 @@ h1{
   height: 5vh;
 }
 
-#newgame_button{
+.dash_header button{
+  background-color: blue;
+  width: 50%;
+  height: 50px;
+}
+
+#boardsList{
+  list-style-type: none;
+}
+/* #get_games_button{
   background-color: blue;
   width: 20%;
-  height: 5vh;
-}
+  height: 50px;
+} */
