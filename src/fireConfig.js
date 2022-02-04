@@ -34,24 +34,31 @@ export const fireApp = firebase.initializeApp({
   }
 
   export const getGames = async() => {
-    const games = firestore.collection('Games');
-    const gameData = await games.get();
-    let output = [];
-    gameData.docs.forEach(item=>{
-        if (auth.currentUser.uid === item.data().uid){
-            output.push(item.data());
-        }
-        
-    });
-    console.log(auth.currentUser.uid);
-    console.log(output);
+    let boards = [];
+    const resp = firestore.collection('Games').where("uid", "==", auth.currentUser.uid);
+    const data = await resp.get();
+
+    data.docs.forEach((item)=>{
+      
+      let b = {board_string: item.data().Board, id: item.id};
+      boards.push(b);
+    })
+   
+    return boards;
   }
 
   export const createNewGame = async() => {
-    const games = firestore.collection('Games');
-    await games.add(
-        {
-            'Board': newBoard_str, 
-            'uid': auth.currentUser.uid,
-        });
+    const newGame = {
+      'Board': newBoard_str, 
+      'uid': auth.currentUser.uid,
+  };
+    var gameRef = firestore.collection('Games').doc();
+    gameRef.set(newGame)
+    console.log(gameRef);
+    return gameRef;
+        
+  }
+
+  export const updateGame = async(id, board_string) => {
+    firestore.collection("Games").doc(id).update({Board: board_string});
   }
